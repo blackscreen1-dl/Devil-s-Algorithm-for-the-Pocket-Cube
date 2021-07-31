@@ -21,6 +21,12 @@ struct cube{
 	void Lp();
 	void F();
 	void Fp();
+	void R();
+	void Rp();
+	void B();
+	void Bp();
+	void D();
+	void Dp();
 	void move(int);
 	ll get_id();
 };
