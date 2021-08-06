@@ -51,10 +51,7 @@ bool vis[1100000];
 void dfs(cube c,vector<int> &ans){
 	vis[group[id[c.get_id()]]]=true;
 	
-	vector<int> v={0,1,2,3,4,5};
-	shuffle(v.begin(),v.end(),rng);
-	
-	for (auto x:v){
+	rep(x,0,6){
 		cube c2=c;
 		c2.move(x);
 		
@@ -122,7 +119,7 @@ int main(){
 			ll temp=get_id(curr);
 			group[id[temp]]=GIDX;
 			
-			conv(curr,element,curr);
+			conv(element,curr,curr); //order matters here!
 			
 			bool identity=true;
 			rep(y,0,24) if (curr[y]!=states[x][y]) identity=false;
@@ -139,36 +136,15 @@ int main(){
 	
 	vector<int> ans;
 	
-	vector<int> v;
-	rep(x,0,IDX) v.push_back(x);
-	shuffle(v.begin(),v.end(),rng);
+	dfs(cube(),ans);
 	
-	for (auto it:v) if (!vis[group[it]]){
-		cube c=cube();
-		
-		vector<int> v;
-		for (auto ch:moves[it]){
-			c.move(ch-'0');
-			v.push_back(ch-'0');
-		}
-		
-		for (auto it2:v) ans.push_back(it2);
-		dfs(c,ans);
-		reverse(v.begin(),v.end());
-		for (auto it2:v) ans.push_back(it2^1);
-	}
+	cout<<ans.size()<<endl;
 	
 	int arr[24];
 	rep(x,0,24) arr[x]=x;
 	shortest_moves(arr,element,ans);
 	
 	cout<<ans.size()<<endl;
-	
-	cube c=cube();
-	
-	cout<<"debug: "<<group[id[c.get_id()]]<<endl;
-	for (auto it:ans) c.move(it);
-	cout<<"debug: "<<group[id[c.get_id()]]<<endl;
 	
 	//dump moves to a textfile
 	ofstream out("devil.txt");
