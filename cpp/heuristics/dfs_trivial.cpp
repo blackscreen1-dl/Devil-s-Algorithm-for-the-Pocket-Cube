@@ -43,22 +43,21 @@ void shortest_moves(int *i,int *j,vector<int> &ans){
 }
 
 int states[3700000][24];
-int al[3700000][6];
 
 int group[3700000];
 
 bool vis[1100000];
 
-void dfs(int i,vector<int> &ans){
-	vis[group[i]]=true;
+void dfs(cube c,vector<int> &ans){
+	vis[group[id[c.get_id()]]]=true;
 	
-	vector<int> v={0,1,2,3,4,5};
-	shuffle(v.begin(),v.end(),rng);
-	
-	for (int x:v){
-		if (!vis[group[al[i][x]]]){
+	rep(x,0,6){
+		cube c2=c;
+		c2.move(x);
+		
+		if (!vis[group[id[c2.get_id()]]]){
 			ans.push_back(x);
-			dfs(al[i][x],ans);
+			dfs(c2,ans);
 			ans.push_back(x^1);
 		}
 	}
@@ -133,28 +132,13 @@ int main(){
 	
 	cout<<GIDX<<" "<<GIDX*36<<endl;
 	
-	
-	//precompute adjacentcy list to make runtime faster
-	rep(x,0,IDX){
-		cube c=cube();
-		
-		for (auto ch:moves[x]){
-			c.move(ch-'0');
-		}
-		
-		rep(y,0,6){
-			c.move(y);
-			al[x][y]=id[c.get_id()];
-			c.move(y^1);
-		}
-	}
-	cout<<"precomputation done"<<endl;
-	
-	
 	memset(vis,false,sizeof(vis));
-		
+	
 	vector<int> ans;
-	dfs(IDX-1,ans);
+	
+	dfs(cube(),ans);
+	
+	cout<<ans.size()<<endl;
 	
 	int arr[24];
 	rep(x,0,24) arr[x]=x;
@@ -166,5 +150,4 @@ int main(){
 	ofstream out("devil.txt");
 	for (auto it:ans) out<<it;
 	out.close();
-	
 }
