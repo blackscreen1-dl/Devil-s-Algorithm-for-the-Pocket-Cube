@@ -49,7 +49,7 @@ int group[3700000];
 
 bool vis[110000];
 
-const int FWD=5;
+const int FWD=1;
 const int FWD_SZ=pow(6,FWD)+0.5;
 
 int main(){
@@ -140,14 +140,16 @@ int main(){
 		
 		cout<<"precomputation done"<<endl;
 		
-	cout<<"new chain"<<endl;
-		
 		memset(vis,false,sizeof(vis));
 		
-		vis[group[IDX-1]]=true;
-		vector<int> chain={group[IDX-1]};
+		int g0=group[IDX-1];
+		vis[g0]=true;
+		vector<int> chain={g0};
+		set<int> adj;
 		
-		rep(rounds,0,300001){
+		rep(x,0,6) rep(y,0,6) adj.insert(al[al[g0][x]][y]);
+		
+		while (chain.size()!=102060 || !adj.count(chain.back())){
 			while (true){
 				bool deadend=true;
 				
@@ -194,9 +196,9 @@ int main(){
 			int cut=v[rng()%5];
 			int idx=-1; rep(x,0,chain.size()) if (chain[x]==al[b][cut]) idx=x;
 			reverse(chain.begin()+idx+1,chain.end());
-			
-			if (rounds%10000==0) cout<<rounds<<" "<<chain.size()<<endl;
 		}
+		
+		cout<<"debug: "<<chain.size()<<endl;
 		
 		cout<<chain.front()<<" "<<group[IDX-1]<<endl;
 		
@@ -214,7 +216,19 @@ int main(){
 			}
 		}
 		
-		shortest_moves(states[id[c.get_id()]],element,ans);
+		int pow_element[36][24];
+		rep(x,0,24) pow_element[0][x]=x;
+		rep(x,1,36) conv(pow_element[x-1],element,pow_element[x]);
+		
+		int best=1;
+		
+		rep(x,0,36) if (__gcd(x,36)==1){
+			vector<int> temp;
+			shortest_moves(states[id[c.get_id()]],pow_element[x],temp);
+			if (temp.size()==2) best=x;
+		}
+		
+		shortest_moves(states[id[c.get_id()]],pow_element[best],ans);
 		
 		cout<<"size of devils algorithm: "<<ans.size()<<endl;
 		
