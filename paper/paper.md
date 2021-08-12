@@ -14,13 +14,24 @@ Proof of lemma $2$:
 
 Suppose $x \in G_N$ and $ord(x)=meo(G_N)$. Put $a$ and $b$ in the same congruency class if $x \star a=b$, note that order matters as the operator is not commutative. Then, the are $\frac{ord(G_N)}{meo(G_N)}$ congruency classes, each with $meo(G_N)$ elements. Suppose that a single pass of our algorithm transforms $1_e$ to $x$. Then, if we visited element $a$ in the first pass of the Devil's algorithm, we would visit $x \star a$ in the second pass and $x^2 \star a$ in the third pass and so on. Therefore, we only need to visit each congruency class at least once in the first pass of the Devil's algorithm then transform the cube to $x$. 
 
-Define a graph $G(V,E)$ with $V$ being the set of congruency classes and edge $(A,B)$ existing in $G$ if for congruency class $A$ and $B$, there exists elements $a \in A$ and $b \in B$ such that $dist(a,b)=1$. Then, $G$ is connected. We will prove this by showing that for any $2$ congruency classes $A$ and $B$, a path between them exists in $G$. Arbitrarily choose $a \in A$ and $b \in B$. Consider a sequence $p_1, p_2, \ldots, p_k$ such that $p_1=a$, $p_k=b$ and $dist(p_i,p_{i+1})=1$. Such a sequence obviously exists. Therefore, $b$ is reachable from $A$ on $G$. $\blacksquare$
+Define a graph $G(V,E)$ with $V$ being the set of congruency classes and edge $(A,B)$ existing in $G$ if for congruency class $A$ and $B$, there exists elements $a \in A$ and $b \in B$ such that $dist(a,b)=1$. Then, $G$ is connected. We will prove this by showing that for any $2$ congruency classes $A$ and $B$, a path between them exists in $G$. Arbitrarily choose $a \in A$ and $b \in B$. Consider a sequence $p_1, p_2, \ldots, p_k$ such that $p_1=a$, $p_k=b$ and $dist(p_i,p_{i+1})=1$. Such a sequence obviously exists. Therefore, $b$ is reachable from $A$ on $G$. 
 
-As such, we are able to find a spanning tree of weight $\frac{ord(G_N)}{meo(G_N)}-1$ over the congruency classes. A valid Devil's algorithm is to traverse the Euler tour of this spanning tree in $2(\frac{ord(G_N)}{meo(G_N)}-1)$ moves then move to element $x$ in at most $GOD_N$ moves using lemma $1$.
+As such, we are able to find a spanning tree of weight $\frac{ord(G_N)}{meo(G_N)}-1$ over the congruency classes. A valid Devil's algorithm is to traverse the Euler tour of this spanning tree in $2(\frac{ord(G_N)}{meo(G_N)}-1)$ moves then move to element $x$ in at most $GOD_N$ moves using lemma $1$. $\blacksquare$
+
+Lemma $3$: The lower bound of the Devil's algorithm on when one of the corner's is fixed is $\frac{ord(G_N)}{meo(G_N)}$.
 
 
 
-By direct search, we find that $ord(G_N)=3674160$, $meo(G_N)=36$ and $GOD_N=14$. Therefore, an upper bound of the Devil's algorithm on a 2x2x2 Rubik's cube is $204132$. A stronger bound on the case of the 2x2x2 Rubik's cube is $204123$ as we can find that there exists a element of order $36$ using the moves $\texttt{U'LULF'}$.
+## Optimizing Devil's Algorithm for 2x2x2
+
+By direct search, we find that $ord(G_2)=3674160$​, $meo(G_2)=36$​ and $GOD_2=14$​. Therefore, an upper bound of the Devil's algorithm on a 2x2x2 Rubik's cube is $204132$​. A stronger bound on the case of the 2x2x2 Rubik's cube is $204123$​ as we can find that there exists a element of order $36$​ using the moves $\texttt{U'LULF'}$​​.
+
+An obvious way to cut the number of moves used is by finding disjoint chains in the graph.
+
+Use some heuristic for Hamiltonian path to get size $102061$​.
 
 When finding such a sequence of moves through dfs on $G$, it should be noted that the source node has to be the congruency class of $1_e$. As if you start at arbitrary state $s$, $s \star a$ and $s \star x \star a$ is not in the same congruency class.
 
+We will prove that the lower bound on the size of the Devil's Algorithm for the 2x2x2 is $102061$.
+
+By lemma $3$, the lower bound is at least $102060$. It suffices to show that the lower bound is not $102060$. We will use parity argument.
